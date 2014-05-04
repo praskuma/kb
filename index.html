@@ -1,0 +1,65 @@
+<html>
+	<head>
+		<title>KB</title>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+		<script type="text/javascript">
+			$('document').ready(function() {
+				
+				$('#search').keyup(function() {
+					
+					var value = $('#search').val();
+				
+					value = $.trim(value)
+					if(value) {
+						$.ajax({url:"get_suggestions.php",
+								data:"search="+value,
+								success:function(result){
+								$("#suggestions").html(result);
+								$("#suggestions ul li").mouseover(function(){
+									$('#suggestions ul li').removeClass();
+									$(this).addClass("listitemhover");
+									$('#suggestions ul li').click(function(){
+										var value =$(this).html()
+										$('#search').val(value)
+										$.ajax({url:"get_details.php",
+								          data:"id="+$(this).attr('id'),
+								          success:function(result){
+												$("#suggestions").html(result);
+						                }});				
+										
+										
+									});
+								});
+									
+						}});
+					}
+				});
+			});
+		</script>
+		<style>
+			.searchlist {
+				list-style: none;
+				background: yellow;
+				width: 155;
+				padding-left: 0;
+				text-align: center;
+			}
+			
+			.listitem {
+				background: yellow;
+			}
+			
+			.listitemhover {
+				background: skyblue;
+				cursor: pointer;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="searchbox">
+			<input type="text" id="search">
+			<div id="suggestions"></div>
+		</div>
+		
+	</body>
+</html>
